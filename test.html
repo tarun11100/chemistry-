@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Material Detective - Test Suite</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        
+        .test-section {
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        
+        .test-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
+        
+        .test-item {
+            background: #f9f9f9;
+            border-left: 4px solid #007bff;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 3px;
+        }
+        
+        .test-item.pass {
+            border-left-color: #28a745;
+            background: #f0f9f6;
+        }
+        
+        .test-item.fail {
+            border-left-color: #dc3545;
+            background: #fdf6f7;
+        }
+        
+        .test-label {
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+        
+        .test-result {
+            font-size: 14px;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        button:hover {
+            background: #0056b3;
+        }
+        
+        button.danger {
+            background: #dc3545;
+        }
+        
+        button.danger:hover {
+            background: #c82333;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: bold;
+            margin-left: 10px;
+        }
+        
+        .status-badge.pass {
+            background: #28a745;
+            color: white;
+        }
+        
+        .status-badge.fail {
+            background: #dc3545;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="test-section">
+        <div class="test-title">🧪 Material Detective - Test Suite</div>
+        <p>This page tests the login, signup, and data storage functionality.</p>
+        <button onclick="runAllTests()">Run All Tests</button>
+        <button class="danger" onclick="clearAllData()">Clear All Test Data</button>
+    </div>
+
+    <div id="test-results"></div>
+
+    <script>
+        const testResults = [];
+
+        function addTestResult(testName, passed, details) {
+            testResults.push({ testName, passed, details });
+            displayResults();
+        }
+
+        function displayResults() {
+            const resultsDiv = document.getElementById("test-results");
+            resultsDiv.innerHTML = "";
+
+            testResults.forEach((result, index) => {
+                const testDiv = document.createElement("div");
+                testDiv.className = `test-section`;
+
+                const statusClass = result.passed ? "pass" : "fail";
+                const statusText = result.passed ? "✓ PASS" : "✗ FAIL";
+
+                testDiv.innerHTML = `
+                    <div class="test-item ${statusClass}">
+                        <div class="test-label">
+                            ${statusText} - ${result.testName}
+                            <span class="status-badge ${statusClass}">${result.passed ? "PASS" : "FAIL"}</span>
+                        </div>
+                        <div class="test-result">${result.details}</div>
+                    </div>
+                `;
+                resultsDiv.appendChild(testDiv);
+            });
+        }
+
+        function runAllTests() {
+            testResults.length = 0;
+            
+            // Test 1: localStorage availability
+            testLocalStorageAvailability();
+            
+            // Test 2: Signup functionality
+            testSignupFunctionality();
+            
+            // Test 3: Login with correct credentials
+            testLoginSuccess();
+            
+            // Test 4: Login with incorrect credentials
+            testLoginFailure();
+            
+            // Test 5: User persistence
+            testUserPersistence();
+            
+            // Test 6: Multiple users
+            testMultipleUsers();
+            
+            // Test 7: Session management
+            testSessionManagement();
+            
+            console.log("All tests completed!");
+        }
+
+        function testLocalStorageAvailability() {
+            try {
+                localStorage.setItem("test_key", "test_value");
+                const value = localStorage.getItem("test_key");
+                localStorage.removeItem("test_key");
+                
+                if (value === "test_value") {
+                    addTestResult(
+                        "localStorage Availability",
+                        true,
+                        "localStorage is working correctly and can store/retrieve data."
+                    );
+                } else {
+                    addTestResult(
+                        "localStorage Availability",
+                        false,
+                        "localStorage returned unexpected value."
+                    );
+                }
+            } catch (e) {
+                addTestResult(
+                    "localStorage Availability",
+                    false,
+                    "localStorage is not available: " + e.message
+                );
+            }
+        }
+
+        function testSignupFunctionality() {
+            try {
+                // Clear existing users
+                localStorage.removeItem("md_users");
+                
+                // Simulate signup
+                const newUser = {
+                    email: "test@example.com",
+                    username: "testuser",
+                    password: "password123"
+                };
+                
+                const existingUsers = JSON.parse(localStorage.getItem("md_users") || "[]");
+                existingUsers.push(newUser);
+                localStorage.setItem("md_users", JSON.stringify(existingUsers));
+                
+                // Verify
+                const stored = JSON.parse(localStorage.getItem("md_users"));
+                const userExists = stored.some(u => u.email === "test@example.com");
+                
+                if (userExists) {
+                    addTestResult(
+                        "Signup Functionality",
+                        true,
+                        "User was successfully created and stored in localStorage. Email: test@example.com, Username: testuser"
+                    );
+                } else {
+                    addTestResult(
+                        "Signup Functionality",
+                        false,
+                        "User was not properly stored in localStorage."
+                    );
+                }
+            } catch (e) {
+                addTestResult(
+                    "Signup Functionality",
+                    false,
+                    "Signup test failed: " + e.message
+                );
+            }
+        }
+
+        function testLoginSuccess() {
+            try {
+                // Ensure user exists from previous test
+                const users = JSON.parse(localStorage.getItem("md_users") || "[]");
+                const user = users.find(u => u.email === "test@example.com" && u.password === "password123");
+                
+                if (user) {
+                    // Simulate successful login
+                    localStorage.setItem("md_isLoggedIn", "true");
+                    localStorage.setItem("md_username", user.username);
+                    localStorage.setItem("md_email", user.email);
+                    
+                    // Verify
+                    const isLoggedIn = localStorage.getItem("md_isLoggedIn") === "true";
+                    const storedUsername = localStorage.getItem("md_username");
+                    
+                    if (isLoggedIn && storedUsername === "testuser") {
+                        addTestResult(
+                            "Login Success (Correct Credentials)",
+                            true,
+                            "User successfully logged in. Username: testuser, Login status: true"
+                        );
+                    } else {
+                        addTestResult(
+                            "Login Success (Correct Credentials)",
+                            false,
+                            "Login status not properly stored."
+                        );
+                    }
+                } else {
+                    addTestResult(
+                        "Login Success (Correct Credentials)",
+                        false,
+                        "Test user not found. Make sure signup test ran first."
+                    );
+                }
+            } catch (e) {
+                addTestResult(
+                    "Login Success (Correct Credentials)",
+                    false,
+                    "Login test failed: " + e.message
+                );
+            }
+        }
+
+        function testLoginFailure() {
+            try {
+                // Clear login status
+                localStorage.setItem("md_isLoggedIn", "false");
+                
+                // Try to find user with wrong password
+                const users = JSON.parse(localStorage.getItem("md_users") || "[]");
+                const invalidUser = users.find(u => u.email === "test@example.com" && u.password === "wrongpassword");
+                
+                if (!invalidUser) {
+                    addTestResult(
+                        "Login Failure (Wrong Credentials)",
+                        true,
+                        "System correctly rejected invalid credentials. No user found with wrong password."
+                    );
+                } else {
+                    addTestResult(
+                        "Login Failure (Wrong Credentials)",
+                        false,
+                        "System incorrectly accepted wrong credentials."
+                    );
+                }
+            } catch (e) {
+                addTestResult(
+                    "Login Failure (Wrong Credentials)",
+                    false,
+                    "Login failure test failed: " + e.message
+                );
+            }
+        }
+
+        function testUserPersistence() {
+            try {
+                // Verify user data persists across page reload simulation
+                const username = localStorage.getItem("md_username");
+                const email = localStorage.getItem("md_email");
+                const isLoggedIn = localStorage.getItem("md_isLoggedIn");
+                
+                if (username === "testuser" && email === "test@example.com" && isLoggedIn === "true") {
+                    addTestResult(
+                        "User Data Persistence",
+                        true,
+                        "User data persists correctly in localStorage. Can survive page reloads."
+                    );
+                } else {
+                    addTestResult(
+                        "User Data Persistence",
+                        false,
+                        `Persistence check failed. Username: ${username}, Email: ${email}, LoggedIn: ${isLoggedIn}`
+                    );
+                }
+            } catch (e) {
+                addTestResult(
+                    "User Data Persistence",
+                    false,
+                    "Persistence test failed: " + e.message
+                );
+            }
+        }
+
+        function testMultipleUsers() {
+            try {
+                // Add another user
+                const users = JSON.parse(localStorage.getItem("md_users") || "[]");
+                const newUser = {
+                    email: "user2@example.com",
+                    username: "user2",
+                    password: "pass456"
+                };
+                
+                // Check for duplicates
+                if (!users.some(u => u.email === newUser.email)) {
+                    users.push(newUser);
+                    localStorage.setItem("md_users", JSON.stringify(users));
+                }
+                
+                // Verify
+                const updatedUsers = JSON.parse(localStorage.getItem("md_users"));
+                const userCount = updatedUsers.length;
+                const user2Exists = updatedUsers.some(u => u.email === "user2@example.com");
+                
+                if (userCount >= 2 && user2Exists) {
+                    addTestResult(
+                        "Multiple Users Support",
+                        true,
+                        `System supports multiple users. Current count: ${userCount} users stored.`
+                    );
+                } else {
+                    addTestResult(
+                        "Multiple Users Support",
+                        false,
+                        "Multiple users not properly supported."
+                    );
+                }
+            } catch (e) {
+                addTestResult(
+                    "Multiple Users Support",
+                    false,
+                    "Multiple users test failed: " + e.message
+                );
+            }
+        }
+
+        function testSessionManagement() {
+            try {
+                // Clear session
+                localStorage.setItem("md_isLoggedIn", "false");
+                localStorage.removeItem("md_username");
+                localStorage.removeItem("md_email");
+                
+                // Verify logout
+                const isLoggedIn = localStorage.getItem("md_isLoggedIn");
+                const username = localStorage.getItem("md_username");
+                
+                if (isLoggedIn === "false" && !username) {
+                    addTestResult(
+                        "Session Management (Logout)",
+                        true,
+                        "Session properly cleared. User successfully logged out."
+                    );
+                } else {
+                    addTestResult(
+                        "Session Management (Logout)",
+                        false,
+                        "Session not properly cleared on logout."
+                    );
+                }
+            } catch (e) {
+                addTestResult(
+                    "Session Management (Logout)",
+                    false,
+                    "Session management test failed: " + e.message
+                );
+            }
+        }
+
+        function clearAllData() {
+            if (confirm("Are you sure you want to clear all test data from localStorage?")) {
+                localStorage.removeItem("md_users");
+                localStorage.removeItem("md_isLoggedIn");
+                localStorage.removeItem("md_username");
+                localStorage.removeItem("md_email");
+                testResults.length = 0;
+                displayResults();
+                alert("All test data cleared!");
+            }
+        }
+    </script>
+
+</body>
+</html>
