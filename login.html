@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Login page for material Detctive</title>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: "Poppins", Arial, sans-serif;
+            background: linear-gradient(135deg, #ff6cb6, #0d2041);
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .box {
+            width: 350px;
+            padding: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 15px;
+            backdrop-filter: blur(12px);
+            box-shadow: 0 0 20px rgba(56, 8, 107, 0.2);
+            text-align: center;
+            color: white;
+            animation: fadeIn 0.8s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.95); }
+            to { opacity: 1; transform: scale(1); }
+        }
+
+        h2, h3 {
+            margin-bottom: 10px;
+            font-weight: 600;
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 8px;
+            border: none;
+            background: rgba(255,255,255,0.3);
+            color: white;
+            font-size: 15px;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input::placeholder {
+            color: #ececec;
+        }
+
+        input:focus {
+            background: rgba(255,255,255,0.5);
+        }
+
+        button {
+            width: 95%;
+            padding: 12px;
+            margin-top: 12px;
+            background: #443666;
+            color: #ffffff;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #00a4c2;
+        }
+
+        .fadeBox {
+            display: none;
+            animation: fadeIn 0.8s ease;
+        }
+
+    </style>
+</head>
+
+<body>
+
+<div class="box">
+    <div id="welcome">
+        <h2>Welcome!</h2>
+        <p>Are you a first-time user?</p>
+
+        <button onclick="showSignup()">Yes, Sign Me Up</button>
+        <button onclick="showLogin()">No, I Already Signed Up</button>
+    </div>
+
+    <!-- SIGN UP -->
+    <div id="signup" class="fadeBox">
+        <h3>Create an Account</h3>
+        <input type="email" id="newEmail" placeholder="Enter Email">
+        <input type="text" id="newUser" placeholder="Create Username">
+        <input type="password" id="newPass" placeholder="Create Password">
+        <button onclick="signup()">Sign Up</button>
+        <button onclick="hideAll()" style="background: #666; margin-top: 5px;">Back</button>
+    </div>
+
+    <!-- LOGIN -->
+    <div id="login" class="fadeBox">
+        <h3>Log In</h3>
+        <input type="email" id="loginEmail" placeholder="Enter Email">
+        <input type="password" id="loginPass" placeholder="Enter Password">
+        <button onclick="login()">Log In</button>
+        <button onclick="hideAll()" style="background: #666; margin-top: 5px;">Back</button>
+    </div>
+</div>
+
+<script>
+// Check if user is already logged in
+window.addEventListener('DOMContentLoaded', function() {
+    const isLoggedIn = localStorage.getItem("md_isLoggedIn");
+    if (isLoggedIn === "true") {
+        window.location.href = "home.html";
+    }
+});
+
+function hideAll() {
+    document.getElementById("signup").style.display = "none";
+    document.getElementById("login").style.display = "none";
+    document.getElementById("welcome").style.display = "block";
+}
+
+function showSignup() {
+    document.getElementById("welcome").style.display = "none";
+    document.getElementById("signup").style.display = "block";
+    document.getElementById("login").style.display = "none";
+}
+
+function showLogin() {
+    document.getElementById("welcome").style.display = "none";
+    document.getElementById("login").style.display = "block";
+    document.getElementById("signup").style.display = "none";
+}
+
+function signup() {
+    const newEmail = document.getElementById("newEmail").value.trim();
+    const newUser = document.getElementById("newUser").value.trim();
+    const newPass = document.getElementById("newPass").value.trim();
+
+    if (!newEmail || !newUser || !newPass) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    // Check if user already exists
+    const existingUsers = JSON.parse(localStorage.getItem("md_users") || "[]");
+    if (existingUsers.some(user => user.email === newEmail)) {
+        alert("Email already exists. Please use a different email or login.");
+        return;
+    }
+
+    // Store new user
+    existingUsers.push({
+        email: newEmail,
+        username: newUser,
+        password: newPass
+    });
+    localStorage.setItem("md_users", JSON.stringify(existingUsers));
+
+    alert("Sign up successful! Now log in.");
+    showLogin();
+    document.getElementById("newEmail").value = "";
+    document.getElementById("newUser").value = "";
+    document.getElementById("newPass").value = "";
+}
+
+function login() {
+    const loginEmail = document.getElementById("loginEmail").value.trim();
+    const loginPass = document.getElementById("loginPass").value.trim();
+
+    if (!loginEmail || !loginPass) {
+        alert("Please fill out all fields.");
+        return;
+    }
+
+    // Verify credentials
+    const existingUsers = JSON.parse(localStorage.getItem("md_users") || "[]");
+    const user = existingUsers.find(u => u.email === loginEmail && u.password === loginPass);
+
+    if (user) {
+        localStorage.setItem("md_isLoggedIn", "true");
+        localStorage.setItem("md_username", user.username);
+        localStorage.setItem("md_email", user.email);
+        alert("Login successful!");
+        window.location.href = "home.html";
+    } else {
+        alert("Invalid email or password.");
+    }
+}
+
+// Allow Enter key to submit
+document.addEventListener('DOMContentLoaded', function() {
+    document.getElementById("newPass")?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') signup();
+    });
+    document.getElementById("loginPass")?.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') login();
+    });
+});
+</script>
+
+</body>
+</html>

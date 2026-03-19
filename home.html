@@ -1,0 +1,840 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Material Detective - Home</title>
+    <!DOCTYPE html>
+    <html>
+
+    <head>
+
+        <title>Material Detective - Home</title>
+        <style>
+            /* ===== GLOBAL + BACKGROUND ===== */
+            body {
+                margin: 0;
+                padding: 0;
+                font-family: "Poppins", Arial, sans-serif;
+                min-height: 100vh;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                color: #fff;
+
+                /* periodic table image + dark gradient overlay */
+                background:
+                    linear-gradient(135deg, rgba(5, 10, 25, 0.88), rgba(38, 3, 52, 0.9)),
+                    url("https://i.pinimg.com/736x/55/75/b6/5575b60fbc39a60e72dea78d328619f8.jpg");
+                background-size: cover;
+                background-position: center;
+                background-attachment: fixed;
+                background-blend-mode: overlay;
+            }
+
+            /* ===== MAIN CONTAINER ===== */
+            .home-container {
+                width: 90%;
+                max-width: 1100px;
+                background: radial-gradient(circle at top left, rgba(255, 255, 255, 0.08), rgba(0, 0, 0, 0.5));
+                border-radius: 24px;
+                backdrop-filter: blur(18px) saturate(180%);
+                -webkit-backdrop-filter: blur(18px) saturate(180%);
+                border: 1px solid rgba(255, 255, 255, 0.18);
+                box-shadow:
+                    0 24px 40px rgba(0, 0, 0, 0.65),
+                    0 0 0 1px rgba(255, 255, 255, 0.05);
+                padding: 26px 32px 34px;
+            }
+
+            .home-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                gap: 10px;
+                margin-bottom: 22px;
+                flex-wrap: wrap;
+            }
+
+            .home-header h1 {
+                margin: 0;
+                font-size: 28px;
+                letter-spacing: 0.04em;
+            }
+
+            .home-header p {
+                margin: 5px 0 0;
+                font-size: 14px;
+                opacity: 0.9;
+            }
+
+            .user-tag {
+                padding: 8px 16px;
+                border-radius: 999px;
+                background: linear-gradient(135deg, rgba(133, 255, 211, 0.2), rgba(0, 232, 255, 0.08));
+                border: 1px solid rgba(158, 255, 240, 0.5);
+                font-size: 13px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .user-tag::before {
+                content: "";
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: #4cff9a;
+                box-shadow: 0 0 10px rgba(76, 255, 154, 0.9);
+            }
+
+            /* ===== GRID & CARDS ===== */
+            .grid {
+                display: flex;
+                flex-wrap: wrap;
+                gap: 20px;
+            }
+
+            .card {
+                position: relative;
+                flex: 1 1 260px;
+                min-width: 260px;
+                background: linear-gradient(145deg,
+                        rgba(19, 32, 68, 0.9),
+                        rgba(25, 9, 43, 0.92));
+                border-radius: 18px;
+                padding: 18px 18px 20px;
+                box-shadow:
+                    0 16px 30px rgba(0, 0, 0, 0.55),
+                    0 0 0 1px rgba(255, 255, 255, 0.06);
+                border: 1px solid rgba(255, 255, 255, 0.14);
+                overflow: hidden;
+                transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+            }
+
+            .card::before {
+                content: "";
+                position: absolute;
+                inset: -40%;
+                background:
+                    radial-gradient(circle at 0% 0%, rgba(255, 255, 255, 0.12), transparent 55%),
+                    radial-gradient(circle at 100% 100%, rgba(0, 230, 255, 0.12), transparent 55%);
+                opacity: 0.4;
+                pointer-events: none;
+            }
+
+            .card h2 {
+                position: relative;
+                margin-top: 0;
+                margin-bottom: 8px;
+                font-size: 20px;
+                letter-spacing: 0.05em;
+            }
+
+            .card p {
+                position: relative;
+                margin-top: 0;
+                margin-bottom: 12px;
+                font-size: 14px;
+                line-height: 1.4;
+                opacity: 0.92;
+            }
+
+            .card:hover {
+                transform: translateY(-4px);
+                box-shadow:
+                    0 22px 36px rgba(0, 0, 0, 0.75),
+                    0 0 0 1px rgba(255, 255, 255, 0.16);
+                border-color: rgba(0, 255, 255, 0.45);
+            }
+
+            /* faint periodic-table pattern overlay in cards (optional) */
+            .card::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background-image:
+                    linear-gradient(90deg, rgba(255, 255, 255, 0.04) 1px, transparent 1px),
+                    linear-gradient(180deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px);
+                background-size: 32px 32px;
+                opacity: 0.4;
+                pointer-events: none;
+                mix-blend-mode: soft-light;
+            }
+
+            .upload-area {
+                position: relative;
+                border: 1.5px dashed rgba(182, 232, 255, 0.8);
+                border-radius: 14px;
+                padding: 14px;
+                text-align: center;
+                background: radial-gradient(circle at top, rgba(0, 252, 255, 0.12), transparent 60%);
+            }
+
+            .upload-area::before {
+                content: "PNG / JPG up to 5MB";
+                position: absolute;
+                bottom: 6px;
+                right: 10px;
+                font-size: 10px;
+                opacity: 0.6;
+            }
+
+            /* ===== BUTTONS ===== */
+            .upload-btn,
+            .camera-btn,
+            .primary-btn,
+            .secondary-btn {
+                position: relative;
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+                padding: 9px 18px;
+                margin: 4px 4px;
+                border-radius: 999px;
+                border: 1px solid transparent;
+                cursor: pointer;
+                font-weight: 600;
+                font-size: 13px;
+                letter-spacing: 0.03em;
+                transition:
+                    transform 0.16s ease,
+                    box-shadow 0.18s ease,
+                    background 0.18s ease,
+                    border-color 0.18s ease,
+                    color 0.18s ease;
+                overflow: hidden;
+            }
+
+            .upload-btn,
+            .camera-btn {
+                background: linear-gradient(135deg, #00b7ff, #28ffe0);
+                color: #03111e;
+                box-shadow: 0 10px 20px rgba(0, 199, 255, 0.45);
+            }
+
+            .upload-btn:hover,
+            .camera-btn:hover {
+                transform: translateY(-1px);
+                box-shadow: 0 13px 26px rgba(0, 199, 255, 0.6);
+                filter: brightness(1.05);
+            }
+
+            .primary-btn {
+                background: linear-gradient(135deg, #ff7ab2, #ffd76f);
+                color: #1a0a1b;
+                box-shadow: 0 10px 20px rgba(255, 103, 179, 0.5);
+            }
+
+            .primary-btn:hover {
+                transform: translateY(-1px) scale(1.01);
+                box-shadow: 0 14px 26px rgba(255, 103, 179, 0.7);
+                filter: brightness(1.06);
+            }
+
+            .secondary-btn {
+                background: rgba(9, 18, 46, 0.6);
+                color: #e8f7ff;
+                border-color: rgba(169, 219, 255, 0.6);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.5);
+            }
+
+            .secondary-btn:hover {
+                background: linear-gradient(135deg, rgba(44, 94, 255, 0.8), rgba(3, 220, 255, 0.8));
+                color: #050915;
+                border-color: transparent;
+                transform: translateY(-1px);
+                box-shadow: 0 15px 28px rgba(3, 193, 255, 0.75);
+            }
+
+            .primary-btn::after,
+            .secondary-btn::after {
+                content: "";
+                position: absolute;
+                inset: 0;
+                background: radial-gradient(circle at 0 0, rgba(255, 255, 255, 0.8), transparent 60%);
+                opacity: 0;
+                transition: opacity 0.25s ease, transform 0.25s ease;
+            }
+
+            .primary-btn:hover::after,
+            .secondary-btn:hover::after {
+                opacity: 0.28;
+                transform: translateX(6px);
+            }
+
+            input[type="file"] {
+                display: none;
+            }
+
+            .preview {
+                margin-top: 10px;
+                max-height: 150px;
+                border-radius: 10px;
+                overflow: hidden;
+                border: 1px solid rgba(180, 224, 255, 0.5);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.6);
+            }
+
+            .preview img {
+                max-width: 100%;
+                display: block;
+            }
+
+            ul {
+                padding-left: 18px;
+                margin: 8px 0 0;
+                font-size: 13px;
+                opacity: 0.9;
+            }
+
+            /* quiz text tweaks */
+            #quizArea {
+                background: radial-gradient(circle at top, rgba(0, 0, 0, 0.35), transparent 80%);
+                border-radius: 10px;
+                padding: 10px;
+            }
+
+            #quizQuestion {
+                text-shadow: 0 0 6px rgba(0, 0, 0, 0.7);
+            }
+
+            #quizProgress {
+                font-size: 12px;
+                color: #cfe9ff;
+            }
+
+            /* dashboard table styling */
+            #dashboard table {
+                border-radius: 10px;
+                overflow: hidden;
+            }
+
+            #dashboard th,
+            #dashboard td {
+                background: rgba(4, 16, 40, 0.9);
+            }
+
+            #dashboard tr:nth-child(even) td {
+                background: rgba(12, 30, 70, 0.9);
+            }
+
+            #dashboard th {
+                font-weight: 600;
+                font-size: 11px;
+                text-transform: uppercase;
+                letter-spacing: 0.05em;
+            }
+
+            #dashboard td {
+                font-size: 12px;
+            }
+
+            @media (max-width: 700px) {
+                .home-header {
+                    flex-direction: column;
+                    align-items: flex-start;
+                }
+
+                .home-container {
+                    padding: 20px 18px 26px;
+                }
+            }
+
+            /* floating redirect button bottom-right */
+            .floating-chat-btn {
+                position: fixed;
+                bottom: 20px;
+                right: 20px;
+                width: 64px;
+                height: 64px;
+                border-radius: 50%;
+                border: none;
+                cursor: pointer;
+                background: radial-gradient(circle at top, #00b7ff, #03111e);
+                box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 0;
+            }
+
+            .floating-chat-btn img {
+                width: 38px;
+                height: 38px;
+                object-fit: contain;
+            }
+        </style>
+
+
+    </head>
+
+<body>
+
+    <div class="home-container">
+        <div class="home-header">
+            <div>
+                <h1>Material Detective</h1>
+                <p>Detect what everyday products are made of and master the periodic table.</p>
+            </div>
+            <div class="user-tag" id="welcomeUser">
+                Logged in as: Explorer
+            </div>
+        </div>
+
+        <div class="grid">
+            <!-- 1. Upload / Camera -->
+            <div class="card">
+                <h2>1. Capture or Upload</h2>
+                <p>Take a photo of any object or upload an image to start detecting the materials inside it.</p>
+
+                <div class="upload-area">
+                    <label class="upload-btn" for="imageInput">Upload Image</label>
+                    <button class="camera-btn" onclick="openCamera()">Use Camera</button>
+                    <input type="file" id="imageInput" accept="image/*" onchange="previewImage(event)">
+                    <div class="preview" id="imagePreview"></div>
+                </div>
+
+                <p style="margin-top:10px;font-size:12px;opacity:0.85;">
+                    Upcoming: AI model will analyze the picture and guess elements like Fe, Cu, Al, etc.
+                </p>
+            </div>
+
+            <!-- 2. Detect & Learn -->
+            <div class="card">
+                <h2>2. Detect & Learn</h2>
+                <p>See predicted materials and jump directly to the related element cards on the periodic table.</p>
+                <ul>
+                    <li>Show atomic number, symbol, and group.</li>
+                    <li>Explain where that element appears in real products.</li>
+                    <li>Link to interactive periodic table view.</li>
+                </ul>
+
+                <button class="primary-btn" onclick="runMaterialDetection()">
+                    Detect Primary Material
+                </button>
+
+                <p id="materialResult" style="margin-top:10px;font-size:13px;opacity:0.9;"></p>
+            </div>
+
+            <!-- 3. Gamified Quiz -->
+            <div class="card">
+                <h2>3. Gamified Quiz</h2>
+                <p>Select an element and practice 10 questions about it.</p>
+
+                <div id="elementGrid" style="max-height:180px;overflow:auto;font-size:13px;">
+                    <label><input type="checkbox" name="element" value="H"> H – Hydrogen</label><br>
+                    <label><input type="checkbox" name="element" value="He"> He – Helium</label><br>
+                    <label><input type="checkbox" name="element" value="Li"> Li – Lithium</label><br>
+                    <label><input type="checkbox" name="element" value="C"> C – Carbon</label><br>
+                    <label><input type="checkbox" name="element" value="N"> N – Nitrogen</label><br>
+                    <label><input type="checkbox" name="element" value="O"> O – Oxygen</label><br>
+                    <label><input type="checkbox" name="element" value="Na"> Na – Sodium</label><br>
+                    <label><input type="checkbox" name="element" value="Mg"> Mg – Magnesium</label><br>
+                    <label><input type="checkbox" name="element" value="Al"> Al – Aluminium</label><br>
+                    <label><input type="checkbox" name="element" value="Si"> Si – Silicon</label><br>
+                    <label><input type="checkbox" name="element" value="Cl"> Cl – Chlorine</label><br>
+                    <label><input type="checkbox" name="element" value="Fe"> Fe – Iron</label><br>
+                </div>
+
+                <button class="primary-btn" onclick="startElementQuiz()">Start Element Quiz</button>
+
+                <p id="lastScoreInfo" style="margin-top:8px;font-size:12px;opacity:0.85;"></p>
+
+                <div id="quizArea" style="margin-top:12px;display:none;font-size:13px;">
+                    <div id="quizQuestion" style="margin-bottom:8px;font-weight:600;"></div>
+                    <div id="quizOptions"></div>
+                    <div id="quizProgress" style="margin-top:6px;opacity:0.85;"></div>
+                </div>
+            </div>
+
+            <!-- 4. Dashboard -->
+            <div class="card">
+                <h2>4. Practice Dashboard</h2>
+                <p>View previous quiz reports for each element.</p>
+
+                <button class="secondary-btn" onclick="buildDashboardTable()">
+                    Refresh Dashboard
+                </button>
+
+                <div id="dashboard" style="margin-top:12px;font-size:13px;max-height:220px;overflow:auto;">
+                    <table style="width:100%;border-collapse:collapse;font-size:12px;">
+                        <thead>
+                            <tr>
+                                <th style="border-bottom:1px solid rgba(255,255,255,0.3);text-align:left;padding:4px;">
+                                    Element</th>
+                                <th style="border-bottom:1px solid rgba(255,255,255,0.3);text-align:left;padding:4px;">
+                                    Best Score</th>
+                                <th style="border-bottom:1px solid rgba(255,255,255,0.3);text-align:left;padding:4px;">
+                                    Questions</th>
+                                <th style="border-bottom:1px solid rgba(255,255,255,0.3);text-align:left;padding:4px;">
+                                    Attempts</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboardBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CORE APP LOGIC -->
+    <script>
+        // Check if logged in
+        window.addEventListener('DOMContentLoaded', function() {
+            const isLoggedIn = localStorage.getItem("md_isLoggedIn");
+            if (isLoggedIn !== "true") {
+                window.location.href = "login.html";
+            }
+            
+            const storedUser = localStorage.getItem("md_username");
+            if (storedUser) {
+                document.getElementById("welcomeUser").innerHTML =
+                    "Logged in as: " + storedUser + ' | <button class="secondary-btn" onclick="logout()" style="margin: 0; padding: 5px 10px; font-size: 12px;">Logout</button>';
+            }
+        });
+        
+        function logout() {
+            localStorage.setItem("md_isLoggedIn", "false");
+            localStorage.removeItem("md_username");
+            localStorage.removeItem("md_email");
+            alert("Logged out successfully!");
+            window.location.href = "login.html";
+        }
+
+        function openCamera() {
+            const input = document.getElementById("imageInput");
+            input.setAttribute("capture", "environment");
+            input.click();
+        }
+
+        function previewImage(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function (e) {
+                const previewDiv = document.getElementById("imagePreview");
+                previewDiv.innerHTML = "<img src='" + e.target.result + "' alt='Preview'>";
+            };
+            reader.readAsDataURL(file);
+        }
+
+        function showComingSoon(section) {
+            if (section === "detector") {
+                alert("Material detector UI will go here. You can connect your ML model later.");
+            } else if (section === "fullQuiz") {
+                alert("Full quiz modes (easy, medium, hard, timed) coming soon.");
+            }
+        }
+    </script>
+
+    <!-- QUIZ + DASHBOARD LOGIC -->
+    <script>
+        const elementData = {
+            H: { name: "Hydrogen", Z: 1, group: "Nonmetal" },
+            He: { name: "Helium", Z: 2, group: "Noble gas" },
+            Li: { name: "Lithium", Z: 3, group: "Alkali metal" },
+            C: { name: "Carbon", Z: 6, group: "Nonmetal" },
+            N: { name: "Nitrogen", Z: 7, group: "Nonmetal" },
+            O: { name: "Oxygen", Z: 8, group: "Nonmetal" },
+            Na: { name: "Sodium", Z: 11, group: "Alkali metal" },
+            Mg: { name: "Magnesium", Z: 12, group: "Alkaline earth metal" },
+            Al: { name: "Aluminium", Z: 13, group: "Post‑transition metal" },
+            Si: { name: "Silicon", Z: 14, group: "Metalloid" },
+            Cl: { name: "Chlorine", Z: 17, group: "Halogen" },
+            Fe: { name: "Iron", Z: 26, group: "Transition metal" }
+        };
+
+        let currentQuiz = [];
+        let currentIndex = 0;
+        let score = 0;
+        let currentElementSymbol = null;
+
+        function startElementQuiz() {
+            const boxes = document.querySelectorAll("input[name='element']:checked");
+            if (boxes.length === 0) {
+                alert("Please select at least one element.");
+                return;
+            }
+            const symbol = boxes[0].value;
+            const data = elementData[symbol];
+            if (!data) {
+                alert("No quiz data for this element yet.");
+                return;
+            }
+
+            currentElementSymbol = symbol;
+            showLastScoreInfo(symbol);
+
+            currentQuiz = buildQuestionsForElement(symbol, data);
+            currentIndex = 0;
+            score = 0;
+
+            document.getElementById("quizArea").style.display = "block";
+            showCurrentQuestion();
+        }
+
+        function showLastScoreInfo(symbol) {
+            const infoP = document.getElementById("lastScoreInfo");
+            const key = "quiz_scores_" + symbol;
+            const stored = localStorage.getItem(key);
+            if (!stored) {
+                infoP.textContent = `No previous scores for ${symbol} yet. Be the first!`;
+                return;
+            }
+            const data = JSON.parse(stored);
+            infoP.textContent =
+                `Past best for ${symbol}: ${data.bestScore}/${data.totalQuestions} in ${data.attempts} attempt(s).`;
+        }
+
+        function saveScoreForElement(symbol, score, total) {
+            const key = "quiz_scores_" + symbol;
+            const stored = localStorage.getItem(key);
+            let data;
+            if (stored) {
+                data = JSON.parse(stored);
+                data.attempts += 1;
+                if (score > data.bestScore) {
+                    data.bestScore = score;
+                }
+                data.totalQuestions = total;
+            } else {
+                data = {
+                    bestScore: score,
+                    totalQuestions: total,
+                    attempts: 1
+                };
+            }
+            localStorage.setItem(key, JSON.stringify(data));
+        }
+
+        function buildQuestionsForElement(symbol, data) {
+            const { name, Z, group } = data;
+
+            const baseQuestions = [
+                {
+                    q: `What is the symbol of ${name}?`,
+                    options: shuffle([symbol, "X", "Y", "Z"]),
+                    answer: symbol
+                },
+                {
+                    q: `What is the name of element with symbol ${symbol}?`,
+                    options: shuffle([name, "Hydrogen", "Oxygen", "Sodium"]),
+                    answer: name
+                },
+                {
+                    q: `What is the atomic number (Z) of ${name}?`,
+                    options: shuffle([String(Z), String(Z + 1), String(Z - 1), String(Z + 2)]),
+                    answer: String(Z)
+                },
+                {
+                    q: `${name} belongs to which group / category?`,
+                    options: shuffle([group, "Noble gas", "Halogen", "Transition metal"]),
+                    answer: group
+                },
+                {
+                    q: `Which of these is a common use of ${name}?`,
+                    options: shuffle([
+                        "Used in everyday materials and alloys",
+                        "Only used in nuclear reactors",
+                        "Not used anywhere in real life",
+                        "Found only in outer space"
+                    ]),
+                    answer: "Used in everyday materials and alloys"
+                }
+            ];
+
+            const more = baseQuestions.map((q, i) => ({
+                q: `Practice ${i + 1}: ` + q.q,
+                options: q.options,
+                answer: q.answer
+            }));
+
+            return baseQuestions.concat(more).slice(0, 10);
+        }
+
+        function showCurrentQuestion() {
+            const qObj = currentQuiz[currentIndex];
+            const qDiv = document.getElementById("quizQuestion");
+            const optDiv = document.getElementById("quizOptions");
+            const progDiv = document.getElementById("quizProgress");
+
+            qDiv.textContent = qObj.q;
+            optDiv.innerHTML = "";
+
+            qObj.options.forEach((opt) => {
+                const btn = document.createElement("button");
+                btn.textContent = opt;
+                btn.className = "primary-btn";
+                btn.style.margin = "4px 4px";
+                btn.onclick = () => handleAnswer(opt);
+                optDiv.appendChild(btn);
+            });
+
+            progDiv.textContent = `Question ${currentIndex + 1} of ${currentQuiz.length} • Score: ${score}`;
+        }
+
+        function handleAnswer(selected) {
+            const qObj = currentQuiz[currentIndex];
+            if (String(selected).trim() === String(qObj.answer).trim()) {
+                score++;
+                alert("Correct!");
+            } else {
+                alert("Incorrect. Correct answer: " + qObj.answer);
+            }
+
+            currentIndex++;
+            if (currentIndex < currentQuiz.length) {
+                showCurrentQuestion();
+            } else {
+                const total = currentQuiz.length;
+                document.getElementById("quizProgress").textContent =
+                    `Quiz finished! Final score: ${score} / ${total}`;
+                document.getElementById("quizOptions").innerHTML = "";
+
+                if (currentElementSymbol) {
+                    saveScoreForElement(currentElementSymbol, score, total);
+                    showLastScoreInfo(currentElementSymbol);
+                }
+            }
+        }
+
+        function shuffle(arr) {
+            const copy = arr.slice();
+            for (let i = copy.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [copy[i], copy[j]] = [copy[j], copy[i]];
+            }
+            return copy;
+        }
+
+        // Dashboard: build table from saved scores
+        function buildDashboardTable() {
+            const tbody = document.getElementById("dashboardBody");
+            tbody.innerHTML = "";
+
+            const symbols = Object.keys(elementData);
+            let hasAny = false;
+
+            symbols.forEach(symbol => {
+                const key = "quiz_scores_" + symbol;
+                const stored = localStorage.getItem(key);
+                if (!stored) return;
+
+                const data = JSON.parse(stored);
+                hasAny = true;
+
+                const tr = document.createElement("tr");
+
+                const tdElem = document.createElement("td");
+                tdElem.textContent = symbol + " – " + elementData[symbol].name;
+                tdElem.style.padding = "4px";
+
+                const tdBest = document.createElement("td");
+                tdBest.textContent = data.bestScore;
+                tdBest.style.padding = "4px";
+
+                const tdTotal = document.createElement("td");
+                tdTotal.textContent = data.totalQuestions;
+                tdTotal.style.padding = "4px";
+
+                const tdAttempts = document.createElement("td");
+                tdAttempts.textContent = data.attempts;
+                tdAttempts.style.padding = "4px";
+
+                tr.appendChild(tdElem);
+                tr.appendChild(tdBest);
+                tr.appendChild(tdTotal);
+                tr.appendChild(tdAttempts);
+
+                tbody.appendChild(tr);
+            });
+
+            if (!hasAny) {
+                const tr = document.createElement("tr");
+                const td = document.createElement("td");
+                td.colSpan = 4;
+                td.style.padding = "4px";
+                td.textContent = "No quiz data yet. Play a quiz to see your performance here.";
+                tr.appendChild(td);
+                tbody.appendChild(tr);
+            }
+        }
+    </script>
+
+    <!-- TENSORFLOW.JS + MATERIAL DETECTION -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@4.18.0/dist/tf.min.js"></script>
+    <script>
+        let materialModel;
+        let classLabels = ["Aluminium", "Iron", "Copper", "Plastic", "Glass"];
+
+        async function loadMaterialModel() {
+            try {
+                materialModel = await tf.loadGraphModel("./model/model.json");
+                console.log("Material model loaded");
+            } catch (e) {
+                console.error("Error loading model:", e);
+            }
+        }
+        loadMaterialModel();
+
+        async function runMaterialDetection() {
+            const imgInput = document.getElementById("imageInput");
+            const resultP = document.getElementById("materialResult");
+
+            if (!imgInput.files || imgInput.files.length === 0) {
+                resultP.textContent = "Please upload or capture an image first.";
+                return;
+            }
+
+            if (!materialModel) {
+                resultP.textContent = "Loading model... please wait and try again in a moment.";
+                return;
+            }
+
+            const file = imgInput.files[0];
+            const img = await new Promise((resolve) => {
+                const image = new Image();
+                image.onload = () => resolve(image);
+                image.src = URL.createObjectURL(file);
+            });
+
+            const tensor = tf.browser
+                .fromPixels(img)
+                .resizeNearestNeighbor([224, 224])
+                .toFloat()
+                .div(255.0)
+                .expandDims();
+
+            const predictions = await materialModel.predict(tensor).data();
+            tensor.dispose();
+
+            let bestIndex = 0;
+            let bestProb = predictions[0];
+            for (let i = 1; i < predictions.length; i++) {
+                if (predictions[i] > bestProb) {
+                    bestProb = predictions[i];
+                    bestIndex = i;
+                }
+            }
+
+            const label = classLabels[bestIndex] || "Unknown";
+            const confidence = (bestProb * 100).toFixed(1);
+
+            resultP.textContent =
+                "Predicted primary material: " + label + " (" + confidence + "% confidence).";
+        }
+    </script>
+    <button class="floating-chat-btn" onclick="window.location.href='chatbot.html'">
+        <img src="hydrogen-atom.png" alt="Chatbot">
+    </button>
+
+    Go to Home
+    </button>
+
+
+
+</body>
+
+</html>

@@ -1,0 +1,17 @@
+{
+  "name": "material-detective",
+  "version": "1.0.0",
+  "description": "Material Detective - Chemistry App with Login & Signup",
+  "main": "index.html",
+  "scripts": {
+    "start": "python -m http.server 3000 || npx http-server -p 3000",
+    "dev": "npx http-server -p 3000 -g"
+  },
+  "keywords": [
+    "chemistry",
+    "material",
+    "detective"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
